@@ -182,41 +182,73 @@ In order to flash the application we recommend using
 [MCUXpresso IDE (version >= 11.0.0)](https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/mcuxpresso-integrated-development-environment-ide:MCUXpresso-IDE?tab=Design_Tools_Tab).
 
 -   Import the previously downloaded NXP SDK into MCUXpresso IDE. This can be
-    done by drag-and-dropping the SDK archive into MCUXpresso IDE's "Installed
-    SDKs" tab; ![Select SDK](../../platform/k32w/doc/images/select-sdk.JPG)
--   Import Project CHIP in MCUXpresso IDE as Makefile Project:
-    <i>File->Import->C/C++->Existing Code as Makefile Project-> Next </i>.
-    Select Project CHIP folder as the <i>Existing Code Location</i>. In the
-    <i>Toolchain for Indexer Settings </i> list, be sure to keep the setting to
-    <i>none</i>. Click <i>Finish</i>;
--   Configure MCU Settings: right click on project from the workspace and go to
-    <i>Properties->C/C++ Build->MCU Settings</i>. Select K32W061 from the SDK
-    MCUs list;
--   Configure the toolchain editor: <i>C/C++ Build->Tool Chain Editor</i>.
-    Untick the <i>Display compatible toolchains only</i> checkbox. In the
-    drop-down menu named <i>Current toolchain</i>, select <i>NXP MCU Tools</i>.
-    Click <i>Apply and Close</i>;
--   Create a debug configuration: right click on the project and select <i>Debug
-    As->MCUXpresso IDE LinkServer (inc. CMSIS-DAP) probes</i>. A window to
-    select the binary will appear. Select
-    <i>examples/lock-app/k32w/build/chip-k32w061-lock-example.elf</i> and click
-    OK;
--   Use the debug configuration: under the menu bar, towards the center of the
-    screen, there is a green bug icon with a drop-down arrow next to it. Click
-    on the arrow and select <i>Debug Configurations</i>. In the right side of
-    the Debug Configurations window, go to <i>C/C++ (NXP Semiconductors) MCU
-    Application->openthread LinkServer Default</i>. Make sure that the <i>C/C++
-    Application</i> text box contains
-    <i>examples/lock-app/k32w/build/chip-k32w061-lock-example.elf</i> path. Go
-    to <i>GUI Flash Tool</i> tab. In <i>Target Operations->Program->Options</i>,
-    select "bin" as the <i>Format to use for programming</i>. Make sure the
-    <i>Base address</i> is 0x0. Click <i>Debug</i>. A pop-up window entitled
-    <i>Errors in Workspace</i> will appear. Click <i>Proceed</i>.
-    ![Debug_configuration](../../platform/k32w/doc/images/debg-conf.JPG)
+    done by drag-and-dropping the SDK archive into MCUXpresso IDE's _Installed SDKs_ tab:
+
+![Installed_SDKS](../../platform/k32w/doc/images/installed_sdks.JPG)
+    
+-   Import Project CHIP in MCUXpresso IDE as Makefile Project. Use _none_ 
+as _Toolchain for Indexer Settings_:
+```
+File -> Import -> C/C++ -> Existing Code as Makefile Project
+```
+
+-   Configure MCU Settings:
+    
+```
+Right click on the Project -> Properties -> C/C++ Build -> MCU Settings -> Select K32W061 -> Apply & Close
+```
+![MCU_Sett](../../platform/k32w/doc/images/mcu_settings.JPG)
+
+-   Configure the toolchain editor:
+    
+```
+Right click on the Project -> C/C++ Build-> Tool Chain Editor -> NXP MCU Tools -> Apply & Close
+```
+![MCU_Sett](../../platform/k32w/doc/images/toolchain.JPG)
+
+-   Create a debug configuration:
+```
+Right click on the Project -> Debug -> As->MCUXpresso IDE LinkServer (inc. CMSIS-DAP) probes -> OK -> Select _examples/lock-app/k32w/out/debug/chip-k32w061-lock-example_ 
+```
+![debug_1](../../platform/k32w/doc/images/debug_conf1.JPG)
+    
+-   Set the _Connect script_ for the debug configuration to _QN9090connect.scp_ from the dropdown list:
+```
+Right click on the Project -> Debug As -> Debug configurations... -> GDB Debugger
+```
+![connect](../../platform/k32w/doc/images/connect_scp.JPG)
+
+-   Set the _Initialization Commands_ to:
+```
+Right click on the Project -> Debug As -> Debug configurations... -> Startup
+
+set non-stop on
+set pagination off
+set mi-async
+set remotetimeout 60000
+##target_extended_remote##
+set mem inaccessible-by-default ${mem.access}
+mon ondisconnect ${ondisconnect}
+set arm force-mode thumb
+${load}
+```
+![init](../../platform/k32w/doc/images/init_commands.JPG)
+
+-   Set the _vector.catch_ value to _false_ inside the .launch file:
+```
+Right click on the Project -> Utilities -> Open Directory Browser here -> edit *.launch file:
+
+<booleanAttribute key="vector.catch" value="false"/>
+
+```
+
+-    Debug using the newly created configuration file:
+![debug](../../platform/k32w/doc/images/debug_start.JPG)
+
 
 ## Testing the example
 
-The app can be deployed against any generic OpenThread Border Router. An
-upcoming PR will add step-by-step instructions for setting up a generic
-OpenThread Border Router with an USB K32W061 in RCP mode working as an 802.15.4
-transceiver.
+The app can be deployed against any generic OpenThread Border Router. See the
+guide
+[Commissioning NXP K32W using Android CHIPTool](../../../docs/guides/nxp_k32w_android_commissioning.md)
+for step-by-step instructions.
