@@ -182,43 +182,53 @@ In order to flash the application we recommend using
 [MCUXpresso IDE (version >= 11.0.0)](https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/mcuxpresso-integrated-development-environment-ide:MCUXpresso-IDE?tab=Design_Tools_Tab).
 
 -   Import the previously downloaded NXP SDK into MCUXpresso IDE. This can be
-    done by drag-and-dropping the SDK archive into MCUXpresso IDE's _Installed SDKs_ tab:
+    done by drag-and-dropping the SDK archive into MCUXpresso IDE's _Installed
+    SDKs_ tab:
 
 ![Installed_SDKS](../../platform/k32w/doc/images/installed_sdks.JPG)
-    
--   Import Project CHIP in MCUXpresso IDE as Makefile Project. Use _none_ 
-as _Toolchain for Indexer Settings_:
+
+-   Import Project CHIP in MCUXpresso IDE as Makefile Project. Use _none_ as
+    _Toolchain for Indexer Settings_:
+
 ```
 File -> Import -> C/C++ -> Existing Code as Makefile Project
 ```
 
 -   Configure MCU Settings:
-    
+
 ```
 Right click on the Project -> Properties -> C/C++ Build -> MCU Settings -> Select K32W061 -> Apply & Close
 ```
+
 ![MCU_Sett](../../platform/k32w/doc/images/mcu_settings.JPG)
 
 -   Configure the toolchain editor:
-    
+
 ```
 Right click on the Project -> C/C++ Build-> Tool Chain Editor -> NXP MCU Tools -> Apply & Close
 ```
+
 ![MCU_Sett](../../platform/k32w/doc/images/toolchain.JPG)
 
 -   Create a debug configuration:
+
 ```
-Right click on the Project -> Debug -> As->MCUXpresso IDE LinkServer (inc. CMSIS-DAP) probes -> OK -> Select _examples/lock-app/k32w/out/debug/chip-k32w061-lock-example_ 
+Right click on the Project -> Debug -> As->MCUXpresso IDE LinkServer (inc. CMSIS-DAP) probes -> OK -> Select _examples/lock-app/k32w/out/debug/chip-k32w061-lock-example_
 ```
+
 ![debug_1](../../platform/k32w/doc/images/debug_conf1.JPG)
-    
--   Set the _Connect script_ for the debug configuration to _QN9090connect.scp_ from the dropdown list:
+
+-   Set the _Connect script_ for the debug configuration to _QN9090connect.scp_
+    from the dropdown list:
+
 ```
 Right click on the Project -> Debug As -> Debug configurations... -> GDB Debugger
 ```
+
 ![connect](../../platform/k32w/doc/images/connect_scp.JPG)
 
 -   Set the _Initialization Commands_ to:
+
 ```
 Right click on the Project -> Debug As -> Debug configurations... -> Startup
 
@@ -232,9 +242,11 @@ mon ondisconnect ${ondisconnect}
 set arm force-mode thumb
 ${load}
 ```
+
 ![init](../../platform/k32w/doc/images/init_commands.JPG)
 
 -   Set the _vector.catch_ value to _false_ inside the .launch file:
+
 ```
 Right click on the Project -> Utilities -> Open Directory Browser here -> edit *.launch file:
 
@@ -242,9 +254,8 @@ Right click on the Project -> Utilities -> Open Directory Browser here -> edit *
 
 ```
 
--    Debug using the newly created configuration file:
-![debug](../../platform/k32w/doc/images/debug_start.JPG)
-
+-   Debug using the newly created configuration file:
+    ![debug](../../platform/k32w/doc/images/debug_start.JPG)
 
 ## Testing the example
 
